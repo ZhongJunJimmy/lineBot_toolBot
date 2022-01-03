@@ -37,7 +37,7 @@ bot.on('message', function (event) {
 });
 
 bot.listen('/linewebhook', 3000, function () {
-	debugMode?console.log('[linebot is ready!] (Debug)'):console.log('[linebot is ready!]');
+	debugMode?logMessage("INFO",'[linebot is ready!] (Debug)'):logMessage("INFO", '[linebot is ready!]');
     
 });
 
