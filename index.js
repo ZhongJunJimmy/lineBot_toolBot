@@ -23,7 +23,7 @@ bot.on('message', function (event) {
 		var items = event.message.text.split("\n");
 		if(items.indexOf("隨機選擇") !== -1){
 			//隨機選擇事件
-			ramdonChooseEvent(items);
+			ramdonChooseEvent(items, userName);
 		}
 	});
   
@@ -35,7 +35,7 @@ bot.listen('/linewebhook', 3000, function () {
 });
 
 //隨機選擇事件處理
-function ramdonChooseEvent(items){
+function ramdonChooseEvent(items, userName){
 	logMessage("INFO", "偵測\"隨機選擇\"事件,選項包含: "+items);
 			items = items.filter(item => item !== "隨機選擇");
 			if(items.filter(item => item.length > 10).length > 0){
