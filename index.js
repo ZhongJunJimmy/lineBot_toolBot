@@ -28,13 +28,26 @@ bot.on('message', function (event) {
 	try{
 		event.source.profile().then(function (profile) {
 			var userName = profile.displayName;
-			var recMsg = event.message.text.replace(/\r\n|\n/g,"\\n");
-			logMessage("DEBUG", `${userName}說\"${recMsg}\"`);
-			var items = event.message.text.split("\n");
-			if(items.indexOf("隨機選擇") !== -1){
-				//隨機選擇事件
-				ramdonChooseEvent(event, items, userName);
+			switch(event.message.type){
+				case 'text':
+					logMessage("DEBUG", `${userName} send \"${event.message.text.replace(/\r\n|\n/g,"\\n")}\"`);
+					var items = event.message.text.split("\n");
+					if(items.indexOf("隨機選擇") !== -1){
+						//隨機選擇事件
+						ramdonChooseEvent(event, items, userName);
+					}
+					break;
+				case 'sticker':
+					logMessage("DEBUG", `${userName} send a sticker`);
+					break;
+				default:
+					logMessage("DEBUG", `${userName} send something that message type does not define`);
+				
+
 			}
+				
+			
+			
 		});
 	} catch(error){
 		logMessage("ERROR", error);
