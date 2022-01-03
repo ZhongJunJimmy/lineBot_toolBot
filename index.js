@@ -22,7 +22,21 @@ bot.on('message', function (event) {
 		logMessage("DEBUG", `${userName}說\"${event.message.text.replace(/\r\n|\n/g,"\\n")}\"`);
 		var items = event.message.text.split("\n");
 		if(items.indexOf("隨機選擇") !== -1){
-			logMessage("INFO", "偵測\"隨機選擇\"事件,選項包含: "+items);
+			//隨機選擇事件
+			ramdonChooseEvent(items);
+		}
+	});
+  
+});
+
+bot.listen('/linewebhook', 3000, function () {
+	debugMode?console.log('[linebot is ready!] (Debug)'):console.log('[linebot is ready!]');
+    
+});
+
+//隨機選擇事件處理
+function ramdonChooseEvent(items){
+	logMessage("INFO", "偵測\"隨機選擇\"事件,選項包含: "+items);
 			items = items.filter(item => item !== "隨機選擇");
 			if(items.filter(item => item.length > 10).length > 0){
 				logMessage("ERROR", `選項大於10個字元`);
@@ -36,27 +50,19 @@ bot.on('message', function (event) {
 			}).catch(function (error) {
 				logMessage("ERROR", error);
 			});
-			
-			
-				
-		}
-	});
-  
-});
+}
 
-bot.listen('/linewebhook', 3000, function () {
-	debugMode?console.log('[linebot is ready!] (Debug)'):console.log('[linebot is ready!]');
-    
-});
-
+//隨機選擇結果
 function ramdonChoose(items){
 	return items[getRandomInt(items.length)];
 }
 
+//取得0 < x < max的隨機數
 function getRandomInt(max) {
 	return Math.floor(Math.random() * max);
 }
 
+//log訊息處理函式
 function logMessage(logType, logMessage){
 	var Timestamp = Date.now();
 	switch(logType){
