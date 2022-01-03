@@ -13,8 +13,6 @@ var bot = linebot({
   channelAccessToken: config.channelAccessToken
 });
 
-console.log(bot);
-
 
 var debugMode = 0;
 if (process.argv.length > 2){
