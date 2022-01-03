@@ -24,15 +24,21 @@ logMessage("DEBUG", `Linebot info: ${JSON.stringify(bot)}`);
 
 // message event trigger
 bot.on('message', function (event) {
-	event.source.profile().then(function (profile) {
-		var userName = profile.displayName;
-		logMessage("DEBUG", `${userName}說\"${event.message.text.replace(/\r\n|\n/g,"\\n")}\"`);
-		var items = event.message.text.split("\n");
-		if(items.indexOf("隨機選擇") !== -1){
-			//隨機選擇事件
-			ramdonChooseEvent(event, items, userName);
-		}
-	});
+
+	try{
+		event.source.profile().then(function (profile) {
+			var userName = profile.displayName;
+			logMessage("DEBUG", `${userName}說\"${event.message.text.replace(/\r\n|\n/g,"\\n")}\"`);
+			var items = event.message.text.split("\n");
+			if(items.indexOf("隨機選擇") !== -1){
+				//隨機選擇事件
+				ramdonChooseEvent(event, items, userName);
+			}
+		});
+	} catch(error){
+		logMessage("ERROR", error);
+	}
+	
   
 });
 
