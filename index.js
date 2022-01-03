@@ -42,20 +42,20 @@ bot.listen('/linewebhook', 3000, function () {
 
 //隨機選擇事件處理
 function ramdonChooseEvent(event, items, userName){
+	items = items.filter(item => item !== "隨機選擇");
 	logMessage("INFO", "偵測\"隨機選擇\"事件,選項包含: "+items);
-			items = items.filter(item => item !== "隨機選擇");
-			if(items.filter(item => item.length > 10).length > 0){
-				logMessage("ERROR", `選項大於10個字元`);
-				var reqMessage = `Hi, ${userName} \n任意選項請不要超過10個字元！`;
-			}else{
-				var reqMessage = `Hi, ${userName} \n你的隨機選擇結果為${ramdonChoose(items)}`;
-			}
-			
-			event.reply(reqMessage).then(function (data) {
-				logMessage("INFO", `已傳送: \"${reqMessage.replace(/\r\n|\n/g,"\\n")}\",至客戶端`);
-			}).catch(function (error) {
-				logMessage("ERROR", error);
-			});
+	if(items.filter(item => item.length > 10).length > 0){
+		logMessage("ERROR", `選項大於10個字元`);
+		var reqMessage = `Hi, ${userName} \n任意選項請不要超過10個字元！`;
+	}else{
+		var reqMessage = `Hi, ${userName} \n你的隨機選擇結果為${ramdonChoose(items)}`;
+	}
+	
+	event.reply(reqMessage).then(function (data) {
+		logMessage("INFO", `已傳送: \"${reqMessage.replace(/\r\n|\n/g,"\\n")}\",至客戶端`);
+	}).catch(function (error) {
+		logMessage("ERROR", error);
+	});
 }
 
 //隨機選擇結果
