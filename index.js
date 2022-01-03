@@ -28,7 +28,8 @@ bot.on('message', function (event) {
 	try{
 		event.source.profile().then(function (profile) {
 			var userName = profile.displayName;
-			logMessage("DEBUG", `${userName}說\"${event.message.text.replace(/\r\n|\n/g,"\\n")}\"`);
+			var recMsg = event.message.text.replace(/\r\n|\n/g,"\\n");
+			logMessage("DEBUG", `${userName}說\"${recMsg}\"`);
 			var items = event.message.text.split("\n");
 			if(items.indexOf("隨機選擇") !== -1){
 				//隨機選擇事件
