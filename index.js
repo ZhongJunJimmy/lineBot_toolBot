@@ -5,6 +5,11 @@ const fs = require('fs');
 let rawdata = fs.readFileSync('./config.json');
 let config = JSON.parse(rawdata);
 
+let debugMode = 0;
+if (process.argv.length > 2){
+	if(process.argv.indexOf("debug") !== -1)
+		debugMode = 1;
+}
 
 // Line Channel info
 var bot = linebot({
@@ -13,12 +18,8 @@ var bot = linebot({
   channelAccessToken: config.channelAccessToken
 });
 
+logMessage("DEBUG", `Linebot info:${bot}`);
 
-var debugMode = 0;
-if (process.argv.length > 2){
-	if(process.argv.indexOf("debug") !== -1)
-		debugMode = 1;
-}
 
 
 // message event trigger
