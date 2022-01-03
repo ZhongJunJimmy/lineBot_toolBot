@@ -4,6 +4,8 @@
   "description": "A tool bot",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index.js",
+    "debug": "nodemon index.js debug",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +22,8 @@
   },
   "homepage": "https://github.com/ZhongJunJimmy/lineBot_toolBot#readme",
   "dependencies": {
-    "linebot": "^1.6.1"
+    "linebot": "^1.6.1",
+    "moment": "^2.29.1",
+    "nodemon": "^2.0.15"
   }
 }
