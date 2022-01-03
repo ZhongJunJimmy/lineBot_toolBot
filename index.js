@@ -17,8 +17,8 @@ var bot = linebot({
   channelSecret: config.channelSecret,
   channelAccessToken: config.channelAccessToken
 });
-
-logMessage("DEBUG", `Linebot info:${bot}`);
+//print linebot info in debug mode
+logMessage("DEBUG", `Linebot info: ${JSON.stringify(bot)}`);
 
 
 
