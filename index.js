@@ -1,12 +1,20 @@
 var linebot = require('linebot');
 var moment = require('moment');
+const fs = require('fs');
+
+let rawdata = fs.readFileSync('./config.json');
+let config = JSON.parse(rawdata);
+
 
 // Line Channel info
 var bot = linebot({
-  channelId: '1656768637',
-  channelSecret: 'a9d199f4de51b79863570da214b058f4',
-  channelAccessToken: 'AnnoYMlRarvafN6Eg65Ai1c3+FZzWAXXHUC+RRBHPCKmNg5kEQA4OoOKU1rpovnwbtY8RShDht22BG9rNnJnPOiLZy8tIFOoiHe3RYBRP764hVeT2/W/re4xr5ojlWirmUpsbC2FnA3xtde5TfOCyAdB04t89/1O/w1cDnyilFU='
+  channelId: config.channelId,
+  channelSecret: config.channelSecret,
+  channelAccessToken: config.channelAccessToken
 });
+
+console.log(bot);
+
 
 var debugMode = 0;
 if (process.argv.length > 2){
