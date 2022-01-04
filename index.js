@@ -58,7 +58,7 @@ bot.on('message', function (event) {
 					}else if(event.message.text.indexOf("天氣") !== -1){
 						//let twFileName = `${userName}_${Timestamp}_`;
 						logMessage("DEBUG", `${JSON.stringify(messageJson.twAreaMsg.template)}`);
-						bot.reply(messageJson.twAreaMsg).then(function (data) {
+						bot.reply(messageJson.twAreaMsg.template).then(function (data) {
 							logMessage("INFO", `data: \"${data}\"`);
 						}).catch(function (error) {
 							logMessage("ERROR", error);
