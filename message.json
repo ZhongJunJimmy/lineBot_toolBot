@@ -5,31 +5,26 @@
         "type": "buttons",
         "title": "Menu",
         "text": "Please select",
-        "defaultAction": {
-            "type": "postback",
-            "label": "北部",
-            "uri": "action=north"
-        },
         "actions": [
             {
               "type": "postback",
               "label": "北部",
-              "data": "action=north"
+              "data": "action=north&itemid=111"
             },
             {
               "type": "postback",
               "label": "中部",
-              "data": "action=central"
+              "data": "action=central&itemid=111"
             },
             {
               "type": "postback",
               "label": "南部",
-              "data": "action=south"
+              "data": "action=south&itemid=111"
             },
             {
                 "type": "postback",
                 "label": "東部",
-                "data": "action=east"
+                "data": "action=east&itemid=111"
             }
         ]
     }
