@@ -50,7 +50,7 @@ bot.on('message', function (event) {
 						//隨機選擇事件
 						ramdonChooseEvent(event, userName);
 					}else if(event.message.text.indexOf("天氣") !== -1){
-						let twFileName = `${userName}_${Timestamp}`;
+						let twFileName = `${userName}_${Timestamp}_`;
 						tw.get(
 							config.twKey,
 							{
@@ -65,10 +65,10 @@ bot.on('message', function (event) {
 								if (err) {
 									logMessage("ERROR", err);
 								}else{
-									let twData = JSON.parse(fs.readFileSync(`./data/${twFileName}_63_72hr_CH.json`));
+									let twData = JSON.parse(fs.readFileSync(`./data/${twFileName}63_72hr_CH.json`));
 									logMessage("DEBUG", twData)
 
-									fs.unlinkSync(`./data/${twFileName}_63_72hr_CH.json`);
+									fs.unlinkSync(`./data/${twFileName}63_72hr_CH.json`);
 								}
 							}
 						);
