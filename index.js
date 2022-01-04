@@ -1,7 +1,6 @@
 var linebot = require('linebot');
 var moment = require('moment');
 const fs = require('fs');
-const { is } = require('koa/lib/response');
 
 var Timestamp = Date.now();
 let rawdata = fs.readFileSync('./config.json');
