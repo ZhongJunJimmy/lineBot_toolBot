@@ -50,6 +50,7 @@ bot.on('message', function (event) {
 						//隨機選擇事件
 						ramdonChooseEvent(event, userName);
 					}else if(event.message.text.indexOf("天氣") !== -1){
+						let twFileName = `${userName}_${Timestamp}_`;
 						tw.get(
 							config.twKey,
 							{
@@ -57,15 +58,19 @@ bot.on('message', function (event) {
 								freq: tw.DataEnum.Freq.H72,
 								lang: tw.DataEnum.Lang.ZH,
 								output: 'data',
-								prefix: `${userName}_${Timestamp}_`,
+								prefix: twFileName,
 								toJson: true
 							},
 							err => {
 								if (err) {
-									logMessage("ERROR", `${err}`);
+									logMessage("ERROR", err);
+								}else{
+									let twData = JSON.parse(fs.readFileSync(`./data/${twFileName}_63_72hr_CH.json`));
+									logMessage("DEBUG", twData)
 								}
 							}
 						);
+
 					}
 					break;
 				case 'sticker':
