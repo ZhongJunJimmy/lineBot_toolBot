@@ -30,11 +30,6 @@
                 "type": "postback",
                 "label": "東部",
                 "data": "action=east"
-            },
-            {
-                "type": "postback",
-                "label": "外島",
-                "data": "action=out"
             }
         ]
     }
