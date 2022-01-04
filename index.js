@@ -58,7 +58,7 @@ bot.on('message', function (event) {
 					if(event.message.text.indexOf("隨機選擇") !== -1){
 						//隨機選擇事件
 						ramdonChooseEvent(event, userName);
-					}else if(event.message.text.indexOf("天氣") !== -1){
+					}else if(event.message.text.indexOf("button") !== -1){
 						//let twFileName = `${userName}_${Timestamp}_`;
 						logMessage("DEBUG", `${JSON.stringify(buttonTest())}`);
 						event.reply(buttonTest()).then(function (data) {
@@ -66,6 +66,7 @@ bot.on('message', function (event) {
 						}).catch(function (error) {
 							logMessage("ERROR", error);
 						});
+						// get weather msg
 						/*tw.get(
 							config.twKey,
 							{
@@ -136,23 +137,23 @@ bot.listen('/linewebhook', 3000, function () {
 function buttonTest(){
 	var actions = [{
 		"type": "postback",
-		"label": "北部",
-		"data": "action=north&itemid=111"
+		"label": "button1",
+		"data": "action=button1"
 	  },
 	  {
 		"type": "postback",
-		"label": "中部",
-		"data": "action=central&itemid=111"
+		"label": "button2",
+		"data": "action=button2"
 	  },
 	  {
 		"type": "postback",
-		"label": "南部",
-		"data": "action=south&itemid=111"
+		"label": "button3",
+		"data": "action=button3"
 	  },
 	  {
 		  "type": "postback",
-		  "label": "東部",
-		  "data": "action=east&itemid=111"
+		  "label": "button4",
+		  "data": "action=button4"
 	  }];
 	return handle.buttonHandle("地區", "請選擇地區", actions);
 }
