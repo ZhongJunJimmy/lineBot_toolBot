@@ -7,7 +7,7 @@ var Timestamp = Date.now();
 //read config file
 let config = JSON.parse(fs.readFileSync('./config.json'));
 //read message file
-let message = JSON.parse(fs.readFileSync('./message.json'));
+let messageJson = JSON.parse(fs.readFileSync('./message.json'));
 
 const logPath = "./log";
 const logFileName = `LS_${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}.log`;
@@ -56,8 +56,8 @@ bot.on('message', function (event) {
 						//隨機選擇事件
 						ramdonChooseEvent(event, userName);
 					}else if(event.message.text.indexOf("天氣") !== -1){
-						let twFileName = `${userName}_${Timestamp}_`;
-						event.reply(message.twAreaMsg).then(function (data) {
+						//let twFileName = `${userName}_${Timestamp}_`;
+						event.reply(messageJson.twAreaMsg).then(function (data) {
 							logMessage("INFO", `data: \"${data}\"`);
 						}).catch(function (error) {
 							logMessage("ERROR", error);
