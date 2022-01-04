@@ -19,18 +19,22 @@ if (process.argv.length > 2){
 
 // Line Channel info
 var bot = linebot({
-  channelId: config.channelId,
-  channelSecret: config.channelSecret,
-  channelAccessToken: config.channelAccessToken
-});
-//print linebot info in debug mode
-logMessage("DEBUG", `Linebot info: ${JSON.stringify(bot)}`);
-const citys = [	"CHANGHUA_COUNTY","CHIAYI_CITY","CHIAYI_COUNTY","HSINCHU_CITY",
-				"HSINCHU_COUNTY","HUALIEN_COUNTY","KAOHSIUNG_CITY","KEELUNG_CITY",
-				"KINMEN_AREA","MATSU_AREA","MIAOLI_COUNTY","NANTOU_COUNTY",
-				"NEW_TAIPEI_CITY","PENGHU_COUNTY","PINGTUNG_COUNTY","TAICHUNG_CITY",
-				"TAINAN_CITY","TAIPEI_CITY","TAITUNG_COUNTY","TAOYUAN_CITY","YILAN_COUNTY",
-				"YUNLIN_COUNTY"];
+	channelId: config.channelId,
+	channelSecret: config.channelSecret,
+	channelAccessToken: config.channelAccessToken
+  });
+  //print linebot info in debug mode
+  logMessage("DEBUG", `Linebot info: ${JSON.stringify(bot)}`);
+  const citys = [	"CHANGHUA_COUNTY","CHIAYI_CITY","CHIAYI_COUNTY","HSINCHU_CITY",
+				  "HSINCHU_COUNTY","HUALIEN_COUNTY","KAOHSIUNG_CITY","KEELUNG_CITY",
+				  "KINMEN_AREA","MATSU_AREA","MIAOLI_COUNTY","NANTOU_COUNTY",
+				  "NEW_TAIPEI_CITY","PENGHU_COUNTY","PINGTUNG_COUNTY","TAICHUNG_CITY",
+				  "TAINAN_CITY","TAIPEI_CITY","TAITUNG_COUNTY","TAOYUAN_CITY","YILAN_COUNTY",
+				  "YUNLIN_COUNTY"];
+
+
+
+
 
 
 
@@ -66,13 +70,26 @@ bot.on('message', function (event) {
 									logMessage("ERROR", err);
 								}else{
 									let twData = JSON.parse(fs.readFileSync(`./data/${twFileName}63_72hr_CH.json`));
-									logMessage("DEBUG", JSON.stringify(twData.cwbopendata.dataset));
+									var locDescription = [];
+									twData.cwbopendata.dataset[0].locations[0].location.map((element)=>{
+										locDescription.push({
+											locationName: element.locationName[0],
+											weatherDescription: element.weatherElement[10].time[0].elementValue[0].value[0].replace(/。/g,"\n")
+										})
+									});
 
 									fs.unlinkSync(`./data/${twFileName}63_72hr_CH.json`);
+									fs.unlinkSync(`./data/${twFileName}63_72hr_CH.xml`);
+
+									logMessage("DEBUG", JSON.stringify(locDescription));
+									event.reply(locDescription).then(function (data) {
+										logMessage("INFO", `已傳送: \"\",至客戶端`);
+									}).catch(function (error) {
+										logMessage("ERROR", error);
+									});
 								}
 							}
 						);
-
 					}
 					break;
 				case 'sticker':
