@@ -59,7 +59,7 @@ bot.on('message', function (event) {
 						//let twFileName = `${userName}_${Timestamp}_`;
 						logMessage("DEBUG", `${JSON.stringify(messageJson.twAreaMsg.template)}`);
 						event.reply(messageJson.twAreaMsg.template).then(function (data) {
-							logMessage("INFO", `data: \"${data}\"`);
+							logMessage("INFO", `data: \"${JSON.stringify(data)}\"`);
 						}).catch(function (error) {
 							logMessage("ERROR", error);
 						});
