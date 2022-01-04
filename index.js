@@ -1,6 +1,7 @@
 var linebot = require('linebot');
 var moment = require('moment');
-const fs = require('fs');
+var fs = require('fs');
+var tw = require('taiwan-weather');
 
 var Timestamp = Date.now();
 let rawdata = fs.readFileSync('./config.json');
@@ -24,6 +25,12 @@ var bot = linebot({
 });
 //print linebot info in debug mode
 logMessage("DEBUG", `Linebot info: ${JSON.stringify(bot)}`);
+const citys = [	"CHANGHUA_COUNTY","CHIAYI_CITY","CHIAYI_COUNTY","HSINCHU_CITY",
+				"HSINCHU_COUNTY","HUALIEN_COUNTY","KAOHSIUNG_CITY","KEELUNG_CITY",
+				"KINMEN_AREA","MATSU_AREA","MIAOLI_COUNTY","NANTOU_COUNTY",
+				"NEW_TAIPEI_CITY","PENGHU_COUNTY","PINGTUNG_COUNTY","TAICHUNG_CITY",
+				"TAINAN_CITY","TAIPEI_CITY","TAITUNG_COUNTY","TAOYUAN_CITY","YILAN_COUNTY",
+				"YUNLIN_COUNTY"];
 
 
 
@@ -38,15 +45,40 @@ bot.on('message', function (event) {
 				case 'text':
 					//receive text process
 					logMessage("DEBUG", `${userName} send \"${event.message.text.replace(/\r\n|\n/g,"\\n")}\"`);
-					var items = event.message.text.split("\n");
-					if(items.indexOf("隨機選擇") !== -1){
+					
+					if(event.message.text.indexOf("隨機選擇") !== -1){
 						//隨機選擇事件
-						ramdonChooseEvent(event, items, userName);
+						ramdonChooseEvent(event, userName);
+					}else if(event.message.text.indexOf("天氣") !== -1){
+						tw.get(
+							config.twKey,
+							{
+								loc: tw.DataEnum.Loc[citys[17]],
+								freq: tw.DataEnum.Freq.H72,
+								lang: tw.DataEnum.Lang.ZH,
+								output: 'data',
+								prefix: `${userName}_${Timestamp}_`,
+								toJson: true
+							},
+							err => {
+								if (err) {
+									logMessage("ERROR", `${err}`);
+								}
+							}
+						);
 					}
 					break;
 				case 'sticker':
 					//receive sticker process
 					logMessage("DEBUG", `${userName} send a sticker`);
+					break;
+				case 'image':
+					//receive sticker process
+					logMessage("DEBUG", `${userName} send a image`);
+					break;
+				case 'video':
+					//receive sticker process
+					logMessage("DEBUG", `${userName} send a video`);
 					break;
 				default:
 					// receive other message type process ...[TBD]
@@ -67,7 +99,8 @@ bot.listen('/linewebhook', 3000, function () {
 });
 
 //隨機選擇事件處理
-function ramdonChooseEvent(event, items, userName){
+function ramdonChooseEvent(event, userName){
+	var items = event.message.text.split("\n");
 	// remove the specific item
 	items = items.filter(item => item !== "隨機選擇");
 	// print the all item that will be choose by ramdon
