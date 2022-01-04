@@ -35,7 +35,9 @@ var bot = linebot({
 				  "YUNLIN_COUNTY"];
 
 
-
+bot.on("postback", function (event){
+	console.log(event);
+})
 
 
 
