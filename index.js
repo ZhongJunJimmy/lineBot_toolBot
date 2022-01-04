@@ -1,5 +1,6 @@
 var linebot = require('linebot');
 var moment = require('moment');
+var handle = require('./handle')
 var fs = require('fs');
 var tw = require('taiwan-weather');
 
@@ -59,8 +60,8 @@ bot.on('message', function (event) {
 						ramdonChooseEvent(event, userName);
 					}else if(event.message.text.indexOf("天氣") !== -1){
 						//let twFileName = `${userName}_${Timestamp}_`;
-						logMessage("DEBUG", `${JSON.stringify(messageJson.twAreaMsg)}`);
-						event.reply(messageJson.twAreaMsg).then(function (data) {
+						logMessage("DEBUG", `${JSON.stringify(buttonTest())}`);
+						event.reply(buttonTest()).then(function (data) {
 							logMessage("INFO", `data: \"${JSON.stringify(data)}\"`);
 						}).catch(function (error) {
 							logMessage("ERROR", error);
@@ -132,6 +133,30 @@ bot.listen('/linewebhook', 3000, function () {
 	
 });
 
+function buttonTest(){
+	var actions = [{
+		"type": "postback",
+		"label": "北部",
+		"data": "action=north&itemid=111"
+	  },
+	  {
+		"type": "postback",
+		"label": "中部",
+		"data": "action=central&itemid=111"
+	  },
+	  {
+		"type": "postback",
+		"label": "南部",
+		"data": "action=south&itemid=111"
+	  },
+	  {
+		  "type": "postback",
+		  "label": "東部",
+		  "data": "action=east&itemid=111"
+	  }];
+	return handle.buttonHandle("地區", "請選擇地區", actions);
+}
+
 //隨機選擇事件處理
 function ramdonChooseEvent(event, userName){
 	var items = event.message.text.split("\n");
@@ -153,7 +178,6 @@ function ramdonChooseEvent(event, userName){
 		logMessage("ERROR", error);
 	});
 }
-
 // get ramdon result
 function ramdonChoose(items){
 	return items[getRandomInt(items.length)];

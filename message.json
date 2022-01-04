@@ -1,4 +1,4 @@
-{"twAreaMsg":{
+{"button":{
     "type": "template",
     "altText": "This is a buttons template",
     "template": {
@@ -6,26 +6,6 @@
         "title": "地區",
         "text": "請選擇地區",
         "actions": [
-            {
-              "type": "postback",
-              "label": "北部",
-              "data": "action=north&itemid=111"
-            },
-            {
-              "type": "postback",
-              "label": "中部",
-              "data": "action=central&itemid=111"
-            },
-            {
-              "type": "postback",
-              "label": "南部",
-              "data": "action=south&itemid=111"
-            },
-            {
-                "type": "postback",
-                "label": "東部",
-                "data": "action=east&itemid=111"
-            }
         ]
     }
   }
