@@ -57,8 +57,8 @@ bot.on('message', function (event) {
 						ramdonChooseEvent(event, userName);
 					}else if(event.message.text.indexOf("天氣") !== -1){
 						//let twFileName = `${userName}_${Timestamp}_`;
-						logMessage("DEBUG", `${JSON.stringify(messageJson.twAreaMsg.template)}`);
-						event.reply(messageJson.twAreaMsg.template).then(function (data) {
+						logMessage("DEBUG", `${JSON.stringify(messageJson.twAreaMsg)}`);
+						event.reply(messageJson.twAreaMsg).then(function (data) {
 							logMessage("INFO", `data: \"${JSON.stringify(data)}\"`);
 						}).catch(function (error) {
 							logMessage("ERROR", error);
