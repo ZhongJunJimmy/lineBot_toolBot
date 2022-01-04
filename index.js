@@ -28,8 +28,8 @@ bot.on('message', function (event) {
 	try{
 		event.source.profile().then(function (profile) {
 			var userName = profile.displayName;
-			logMessage("DEBUG", `event.message: ${event.message}`);
-			logMessage("DEBUG", `event.source.profile: ${profile}`);
+			logMessage("DEBUG", `event.message: ${JSON.stringify(event.message)}`);
+			logMessage("DEBUG", `event.source.profile: ${JSON.stringify(profile)}`);
 			switch(event.message.type){
 				case 'text':
 					//receive text process
