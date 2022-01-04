@@ -1,9 +1,14 @@
 var linebot = require('linebot');
 var moment = require('moment');
 const fs = require('fs');
+const { is } = require('koa/lib/response');
 
+var Timestamp = Date.now();
 let rawdata = fs.readFileSync('./config.json');
 let config = JSON.parse(rawdata);
+
+const logPath = "./log";
+const logFileName = `LS_${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}.log`;
 
 // check running mode
 let debugMode = 0;
@@ -59,6 +64,7 @@ bot.on('message', function (event) {
 bot.listen('/linewebhook', 3000, function () {
 	// print the current running mode
 	debugMode?logMessage("INFO",'[linebot is ready!] (Debug)'):logMessage("INFO", '[linebot is ready!]');
+	
 });
 
 //隨機選擇事件處理
@@ -94,21 +100,31 @@ function getRandomInt(max) {
 }
 
 // log message process
-// [TBD] write it in file...
 function logMessage(logType, logMessage){
-	var Timestamp = Date.now();
 	switch(logType){
 		case "ERROR":
+			writeLogFile(`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] ERROR: ${logMessage}\n`);
 			console.log("\x1b[31m",`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] ERROR: ${logMessage}`);
 			break;
 		case "INFO":
+			writeLogFile(`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] INFO: ${logMessage}\n`);
 			console.log("\x1b[32m",	`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] INFO: ${logMessage}`);
 			break;
 		case "DEBUG":
+			writeLogFile(`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] DEBUG: ${logMessage}\n`);
 			if(debugMode === 1) console.log("\x1b[34m",`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] DEBUG: ${logMessage}`);
 			break;
 		default:
-			console.log("\x1b[31m","[`${timeInMs}`] Error: The log type does not existed");
+			writeLogFile(`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] Error: The log type does not existed\n`);
+			console.log("\x1b[31m",`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] Error: The log type does not existed`);
 	}
 		
+}
+// write log msg into log file
+function writeLogFile(msg){	
+	if(!fs.existsSync(logPath))
+		fs.mkdirSync(logPath);
+	fs.appendFile(logPath+"/"+logFileName, msg, function (err) {
+		if (err) console.log(err);
+	});
 }
