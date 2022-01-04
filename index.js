@@ -4,8 +4,10 @@ var fs = require('fs');
 var tw = require('taiwan-weather');
 
 var Timestamp = Date.now();
-let rawdata = fs.readFileSync('./config.json');
-let config = JSON.parse(rawdata);
+//read config file
+let config = JSON.parse(fs.readFileSync('./config.json'));
+//read message file
+let message = JSON.parse(fs.readFileSync('./message.json'));
 
 const logPath = "./log";
 const logFileName = `LS_${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}.log`;
@@ -55,7 +57,12 @@ bot.on('message', function (event) {
 						ramdonChooseEvent(event, userName);
 					}else if(event.message.text.indexOf("天氣") !== -1){
 						let twFileName = `${userName}_${Timestamp}_`;
-						tw.get(
+						event.reply(message.twAreaMsg).then(function (data) {
+							logMessage("INFO", `data: \"${data}\"`);
+						}).catch(function (error) {
+							logMessage("ERROR", error);
+						});
+						/*tw.get(
 							config.twKey,
 							{
 								loc: tw.DataEnum.Loc[citys[17]],
@@ -89,7 +96,7 @@ bot.on('message', function (event) {
 									});
 								}
 							}
-						);
+						);*/
 					}
 					break;
 				case 'sticker':
