@@ -3,8 +3,8 @@
     "altText": "This is a buttons template",
     "template": {
         "type": "buttons",
-        "title": "Menu",
-        "text": "Please select",
+        "title": "地區",
+        "text": "請選擇地區",
         "actions": [
             {
               "type": "postback",
