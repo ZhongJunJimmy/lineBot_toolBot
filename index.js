@@ -66,7 +66,7 @@ bot.on('message', function (event) {
 									logMessage("ERROR", err);
 								}else{
 									let twData = JSON.parse(fs.readFileSync(`./data/${twFileName}63_72hr_CH.json`));
-									logMessage("DEBUG", twData)
+									logMessage("DEBUG", JSON.stringify(twData.dataset));
 
 									fs.unlinkSync(`./data/${twFileName}63_72hr_CH.json`);
 								}
