@@ -76,7 +76,7 @@ function ramdonChooseEvent(event, items, userName){
 	}
 	// send msg to user
 	event.reply(reqMessage).then(function (data) {
-		logMessage("DEBUG", `event.reply result: ${data}`);
+		logMessage("DEBUG", `event.reply result: ${JSON.stringify(data)}`);
 		logMessage("INFO", `已傳送: \"${reqMessage.replace(/\r\n|\n/g,"\\n")}\",至客戶端`);
 	}).catch(function (error) {
 		logMessage("ERROR", error);
