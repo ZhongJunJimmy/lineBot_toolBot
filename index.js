@@ -138,22 +138,22 @@ function buttonTest(){
 	var actions = [{
 		"type": "postback",
 		"label": "button1",
-		"data": {"action":"button1"}
+		"data": [{"action":"button1"}]
 	  },
 	  {
 		"type": "postback",
 		"label": "button2",
-		"data": {"action":"button2"}
+		"data": [{"action":"button2"}]
 	  },
 	  {
 		"type": "postback",
 		"label": "button3",
-		"data": {"action":"button3"}
+		"data": [{"action":"button3"}]
 	  },
 	  {
 		  "type": "postback",
 		  "label": "button4",
-		  "data": {"action":"button4"}
+		  "data": [{"action":"button4"}]
 	  }];
 	return handle.buttonHandle("測試", "請按按鈕", actions);
 }
