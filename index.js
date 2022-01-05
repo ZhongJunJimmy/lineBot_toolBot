@@ -12,11 +12,9 @@ let config = JSON.parse(fs.readFileSync('./config.json'));
 //read message file
 let messageJson = JSON.parse(fs.readFileSync('./message.json'));
 
-const logPath = "./log";
-const logFileName = `LS_${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}.log`;
 
 // check running mode
-let debugMode = 0;
+var debugMode = 0;
 if (process.argv.length > 2){
 	if(process.argv.indexOf("debug") !== -1)
 		debugMode = 1;
@@ -29,7 +27,7 @@ var bot = linebot({
 	channelAccessToken: config.channelAccessToken
   });
 //print linebot info in debug mode
-logMessage.log("DEBUG", `Linebot info: ${JSON.stringify(bot)}`);
+logMessage.log(debugMode, "DEBUG", `Linebot info: ${JSON.stringify(bot)}`);
 
 bot.on("postback", function (event){
 	console.log(event);
@@ -41,23 +39,23 @@ bot.on('message', function (event) {
 	try{
 		event.source.profile().then(function (profile) {
 			var userName = profile.displayName;
-			logMessage.log("DEBUG", `event: ${JSON.stringify(event)}`);
-			logMessage.log("DEBUG", `event.source.profile: ${JSON.stringify(profile)}`);
+			logMessage.log(debugMode, "DEBUG", `event: ${JSON.stringify(event)}`);
+			logMessage.log(debugMode, "DEBUG", `event.source.profile: ${JSON.stringify(profile)}`);
 			switch(event.message.type){
 				case 'text':
 					//receive text process
-					logMessage.log("DEBUG", `${userName} send \"${event.message.text.replace(/\r\n|\n/g,"\\n")}\"`);
+					logMessage.log(debugMode, "DEBUG", `${userName} send \"${event.message.text.replace(/\r\n|\n/g,"\\n")}\"`);
 					
 					if(event.message.text.indexOf("隨機選擇") !== -1){
 						//隨機選擇事件
 						ramdonChooseEvent(event, userName);
 					}else if(event.message.text.indexOf("button") !== -1){
 						//let twFileName = `${userName}_${Timestamp}_`;
-						logMessage.log("DEBUG", `${JSON.stringify(buttonTest())}`);
+						logMessage.log(debugMode, "DEBUG", `${JSON.stringify(buttonTest())}`);
 						event.reply(buttonTest()).then(function (data) {
-							logMessage.log("INFO", `data: \"${JSON.stringify(data)}\"`);
+							logMessage.log(debugMode, "INFO", `data: \"${JSON.stringify(data)}\"`);
 						}).catch(function (error) {
-							logMessage.log("ERROR", error);
+							logMessage.log(debugMode, "ERROR", error);
 						});
 					}else if (event.message.text.indexOf("天氣") !== -1){
 						// get weather msg
@@ -69,9 +67,9 @@ bot.on('message', function (event) {
 							weatherDescription = locDescription[0].weatherDescription;
 						}
 						event.reply(weatherDescription).then(function (data) {
-							logMessage.log("INFO", `已傳送: \"${weatherDescription}\",至客戶端`);
+							logMessage.log(debugMode, "INFO", `已傳送: \"${weatherDescription}\",至客戶端`);
 						}).catch(function (error) {
-							logMessage.log("ERROR", error);
+							logMessage.log(debugMode, "ERROR", error);
 						});
 
 
@@ -83,23 +81,23 @@ bot.on('message', function (event) {
 					break;
 				case 'sticker':
 					//receive sticker process
-					logMessage.log("DEBUG", `${userName} send a sticker`);
+					logMessage.log(debugMode, "DEBUG", `${userName} send a sticker`);
 					break;
 				case 'image':
 					//receive sticker process
-					logMessage.log("DEBUG", `${userName} send a image`);
+					logMessage.log(debugMode, "DEBUG", `${userName} send a image`);
 					break;
 				case 'video':
 					//receive sticker process
-					logMessage.log("DEBUG", `${userName} send a video`);
+					logMessage.log(debugMode, "DEBUG", `${userName} send a video`);
 					break;
 				default:
 					// receive other message type process ...[TBD]
-					logMessage.log("DEBUG", `${userName} send something that message type does not define`);
+					logMessage.log(debugMode, "DEBUG", `${userName} send something that message type does not define`);
 			}
 		});
 	} catch(error){
-		logMessage.log("ERROR", error);
+		logMessage.log(debugMode, "ERROR", error);
 	}
 	
   
@@ -107,7 +105,7 @@ bot.on('message', function (event) {
 
 bot.listen('/linewebhook', 3000, function () {
 	// print the current running mode
-	debugMode?logMessage.log("INFO",'[linebot is ready!] (Debug)'):logMessage.log("INFO", '[linebot is ready!]');
+	debugMode?logMessage.log(debugMode, "INFO",'[linebot is ready!] (Debug)'):logMessage.log(debugMode, "INFO", '[linebot is ready!]');
 	
 });
 //button message test
@@ -141,19 +139,19 @@ function ramdonChooseEvent(event, userName){
 	// remove the specific item
 	items = items.filter(item => item !== "隨機選擇");
 	// print the all item that will be choose by ramdon
-	logMessage.log("INFO", "偵測\"隨機選擇\"事件,選項包含: "+items);
+	logMessage.log(debugMode, "INFO", "偵測\"隨機選擇\"事件,選項包含: "+items);
 	// check if any item lenth great than 10...
 	if(items.filter(item => item.length > 10).length > 0){ 
-		logMessage.log("ERROR", `選項大於10個字元`);
+		logMessage.log(debugMode, "ERROR", `選項大於10個字元`);
 		var reqMessage = `Hi, ${userName} \n任意選項請不要超過10個字元！`;
 	}else{
 		var reqMessage = `Hi, ${userName} \n你的隨機選擇結果為${ramdonChoose(items)}`;
 	}
 	// send msg to user
 	event.reply(reqMessage).then(function (data) {
-		logMessage.log("INFO", `已傳送: \"${reqMessage.replace(/\r\n|\n/g,"\\n")}\",至客戶端`);
+		logMessage.log(debugMode, "INFO", `已傳送: \"${reqMessage.replace(/\r\n|\n/g,"\\n")}\",至客戶端`);
 	}).catch(function (error) {
-		logMessage.log("ERROR", error);
+		logMessage.log(debugMode, "ERROR", error);
 	});
 }
 // get ramdon result
@@ -181,7 +179,7 @@ function getWeatherInfo(location, area){
 		},
 		err => {
 			if (err) {
-				logMessage.log("ERROR", err);
+				logMessage.log(debugMode, "ERROR", err);
 				return locDescription;
 			}else{
 				let twData = JSON.parse(fs.readFileSync(`./data/${twFileName}63_72hr_CH.json`));
@@ -196,7 +194,7 @@ function getWeatherInfo(location, area){
 				fs.unlinkSync(`./data/${twFileName}63_72hr_CH.json`);
 				fs.unlinkSync(`./data/${twFileName}63_72hr_CH.xml`);
 
-				logMessage.log("DEBUG", JSON.stringify(locDescription));
+				logMessage.log(debugMode, "DEBUG", JSON.stringify(locDescription));
 				
 				locDescription.filter(element => element === area);
 				

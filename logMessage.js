@@ -1,8 +1,10 @@
-var fs = require('fs');\
+var fs = require('fs');
 var moment = require('moment');
 var Timestamp = Date.now();
+const logPath = "./log";
+const logFileName = `LS_${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}.log`;
 // log message process
-function log(logType, logMessage){
+function log(debugMode, logType, logMessage){
 	switch(logType){
 		case "ERROR":
 			writeLogFile(`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] ERROR: ${logMessage}\n`);
