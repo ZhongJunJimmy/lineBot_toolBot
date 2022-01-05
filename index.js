@@ -45,11 +45,11 @@ bot.on('message', function (event) {
 				case 'text':
 					//receive text process
 					logMessage.log(debugMode, "DEBUG", `${userName} send \"${event.message.text.replace(/\r\n|\n/g,"\\n")}\"`);
-					
-					if(event.message.text.indexOf("隨機選擇") !== -1){
+					var items = event.message.text.split("\n");
+					if(items[0].indexOf("隨機選擇") !== -1 && items.length === 3){
 						//隨機選擇事件
-						ramdonChooseEvent(event, userName);
-					}else if(event.message.text.indexOf("button") !== -1){
+						ramdonChooseEvent(event, userName, items);
+					}else if(items[0].indexOf("button") !== -1 && items.length === 1){
 						
 						logMessage.log(debugMode, "DEBUG", `${JSON.stringify(buttonTest())}`);
 						event.reply(buttonTest()).then(function (data) {
@@ -57,9 +57,9 @@ bot.on('message', function (event) {
 						}).catch(function (error) {
 							logMessage.log(debugMode, "ERROR", error);
 						});
-					}else if (event.message.text.indexOf("天氣") !== -1){
+					}else if (items[0].indexOf("天氣") !== -1 && items.length === 3){
 						// get weather msg
-						var items = event.message.text.split("\n");
+						
 						// remove the specific item
 						items = items.filter(item => item !== "天氣");
 						// print the all item that will be choose by ramdon
@@ -140,8 +140,7 @@ function buttonTest(){
 }
 
 //隨機選擇事件處理
-function ramdonChooseEvent(event, userName){
-	var items = event.message.text.split("\n");
+function ramdonChooseEvent(event, userName, items){
 	// remove the specific item
 	items = items.filter(item => item !== "隨機選擇");
 	// print the all item that will be choose by ramdon
