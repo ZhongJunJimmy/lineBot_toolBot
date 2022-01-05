@@ -56,7 +56,7 @@ bot.on('message', function (event) {
 							logMessage.log(debugMode, "INFO", `data: \"${JSON.stringify(data)}\"`);
 						}).catch(function (error) {
 							logMessage.log(debugMode, "ERROR", error);
-						});
+						}); 
 					}else if (items[0] === "天氣" && items.length === 3){
 						// get weather msg
 						
