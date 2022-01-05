@@ -170,7 +170,7 @@ function getWeatherInfo(event, userName, location, area){
 				logMessage.log(debugMode, "ERROR", err);
 			}else{
 				let locDescription = [];
-				let twData = JSON.parse(fs.readFileSync(`./data/${twFileName}63_72hr_CH.json`));
+				let twData = JSON.parse(fs.readFileSync(`./data/${twFileName}*_72hr_CH.json`));
 				
 				twData.cwbopendata.dataset[0].locations[0].location.map((element)=>{
 					locDescription.push({
