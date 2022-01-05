@@ -64,18 +64,12 @@ bot.on('message', function (event) {
 						items = items.filter(item => item !== "天氣");
 						// print the all item that will be choose by ramdon
 						logMessage.log(debugMode, "INFO", "偵測\"天氣\"事件,地點為: "+items);
-						event.reply("請稍候，正在幫你查詢所指定的${items[0]}${items[1]}的天氣狀況...").then(function (data) {
+						event.reply(`請稍候，正在幫你查詢所指定的${items[0]}${items[1]}的天氣狀況...`).then(function (data) {
 							logMessage.log(debugMode, "INFO", `data: \"${JSON.stringify(data)}\"`);
 						}).catch(function (error) {
 							logMessage.log(debugMode, "ERROR", error);
 						});
 						getWeatherInfo(event, userName, constLoc[items[0]], items[1]);
-						
-
-
-
-
-
 						
 					}
 					break;
