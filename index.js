@@ -46,7 +46,7 @@ bot.on('message', function (event) {
 					//receive text process
 					logMessage.log(debugMode, "DEBUG", `${userName} send \"${event.message.text.replace(/\r\n|\n/g,"\\n")}\"`);
 					var items = event.message.text.split("\n");
-					if(items[0] === "隨機選擇" && items.length === 3){
+					if(items[0] === "隨機選擇"){
 						//隨機選擇事件
 						ramdonChooseEvent(event, userName, items);
 					}else if(items[0] === "button" && items.length === 1){
