@@ -172,8 +172,12 @@ function getWeatherInfo(event, userName, location, area){
 				let locDescription = [];
 				let fileList = fs.readdirSync("./data/");
 				fileList.filter((file)=>file.indexOf(twFileName) !== -1);
-				logMessage.log(debugMode, "DEBUG", `tw file name: ${fileList[0]}`);
-				let twData = JSON.parse(fs.readFileSync(`./data/${fileList[0]}`));
+				let twJsonFileName = "";
+				fileList.map((file) => {
+					if(file.indexOf(".json") !== -1) twJsonFileName = file;
+				});
+				logMessage.log(debugMode, "DEBUG", `tw file name: ${twJsonFileName}`);
+				let twData = JSON.parse(fs.readFileSync(`./data/${twJsonFileName}`));
 				twData.cwbopendata.dataset[0].locations[0].location.map((element)=>{
 					locDescription.push({
 						locationName: element.locationName[0],
@@ -182,7 +186,7 @@ function getWeatherInfo(event, userName, location, area){
 				});
 
 				fs.unlinkSync(`./data/${fileList[0]}`);
-				fs.unlinkSync(`./data/${fileList[0].replace(/.json/g,".xml")}`);
+				fs.unlinkSync(`./data/${fileList[1]}`);
 
 				logMessage.log(debugMode, "DEBUG", JSON.stringify(locDescription));
 				
