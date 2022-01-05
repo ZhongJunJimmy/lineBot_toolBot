@@ -46,10 +46,10 @@ bot.on('message', function (event) {
 					//receive text process
 					logMessage.log(debugMode, "DEBUG", `${userName} send \"${event.message.text.replace(/\r\n|\n/g,"\\n")}\"`);
 					var items = event.message.text.split("\n");
-					if(items[0].indexOf("隨機選擇") !== -1 && items.length === 3){
+					if(items[0] === "隨機選擇" && items.length === 3){
 						//隨機選擇事件
 						ramdonChooseEvent(event, userName, items);
-					}else if(items[0].indexOf("button") !== -1 && items.length === 1){
+					}else if(items[0] === "button" && items.length === 1){
 						
 						logMessage.log(debugMode, "DEBUG", `${JSON.stringify(buttonTest())}`);
 						event.reply(buttonTest()).then(function (data) {
@@ -57,7 +57,7 @@ bot.on('message', function (event) {
 						}).catch(function (error) {
 							logMessage.log(debugMode, "ERROR", error);
 						});
-					}else if (items[0].indexOf("天氣") !== -1 && items.length === 3){
+					}else if (items[0] === "天氣" && items.length === 3){
 						// get weather msg
 						
 						// remove the specific item
