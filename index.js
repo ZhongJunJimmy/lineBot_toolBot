@@ -65,7 +65,7 @@ bot.on('message', function (event) {
 						// print the all item that will be choose by ramdon
 						logMessage.log(debugMode, "INFO", "偵測\"天氣\"事件,地點為: "+items);
 
-						let locDescription = getWeatherInfo(items[0], items[1]);
+						let locDescription = getWeatherInfo(constLoc[items[0]], items[1]);
 						let weatherDescription = "";
 						if(locDescription.length === 0){
 							weatherDescription = "無法查詢到你指定地點的天氣資訊";
