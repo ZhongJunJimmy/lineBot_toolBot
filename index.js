@@ -155,6 +155,7 @@ function getRandomInt(max) {
 // get weather info
 function getWeatherInfo(event, userName, location, area){
 	let twFileName = `${userName}_${Timestamp}_`;
+	console.log(location);
 	tw.get(
 		config.twKey,
 		{
