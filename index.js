@@ -1,6 +1,8 @@
 var linebot = require('linebot');
 var moment = require('moment');
-var handle = require('./handle')
+var handle = require('./handle');
+var logMessage = require('./logMessage');
+let constLoc = require('./constant.js').locations;
 var fs = require('fs');
 var tw = require('taiwan-weather');
 
@@ -26,21 +28,12 @@ var bot = linebot({
 	channelSecret: config.channelSecret,
 	channelAccessToken: config.channelAccessToken
   });
-  //print linebot info in debug mode
-  logMessage("DEBUG", `Linebot info: ${JSON.stringify(bot)}`);
-  const citys = [	"CHANGHUA_COUNTY","CHIAYI_CITY","CHIAYI_COUNTY","HSINCHU_CITY",
-				  "HSINCHU_COUNTY","HUALIEN_COUNTY","KAOHSIUNG_CITY","KEELUNG_CITY",
-				  "KINMEN_AREA","MATSU_AREA","MIAOLI_COUNTY","NANTOU_COUNTY",
-				  "NEW_TAIPEI_CITY","PENGHU_COUNTY","PINGTUNG_COUNTY","TAICHUNG_CITY",
-				  "TAINAN_CITY","TAIPEI_CITY","TAITUNG_COUNTY","TAOYUAN_CITY","YILAN_COUNTY",
-				  "YUNLIN_COUNTY"];
-
+//print linebot info in debug mode
+logMessage.log("DEBUG", `Linebot info: ${JSON.stringify(bot)}`);
 
 bot.on("postback", function (event){
 	console.log(event);
 })
-
-
 
 
 // message event trigger
@@ -48,81 +41,65 @@ bot.on('message', function (event) {
 	try{
 		event.source.profile().then(function (profile) {
 			var userName = profile.displayName;
-			logMessage("DEBUG", `event: ${JSON.stringify(event)}`);
-			logMessage("DEBUG", `event.source.profile: ${JSON.stringify(profile)}`);
+			logMessage.log("DEBUG", `event: ${JSON.stringify(event)}`);
+			logMessage.log("DEBUG", `event.source.profile: ${JSON.stringify(profile)}`);
 			switch(event.message.type){
 				case 'text':
 					//receive text process
-					logMessage("DEBUG", `${userName} send \"${event.message.text.replace(/\r\n|\n/g,"\\n")}\"`);
+					logMessage.log("DEBUG", `${userName} send \"${event.message.text.replace(/\r\n|\n/g,"\\n")}\"`);
 					
 					if(event.message.text.indexOf("隨機選擇") !== -1){
 						//隨機選擇事件
 						ramdonChooseEvent(event, userName);
 					}else if(event.message.text.indexOf("button") !== -1){
 						//let twFileName = `${userName}_${Timestamp}_`;
-						logMessage("DEBUG", `${JSON.stringify(buttonTest())}`);
+						logMessage.log("DEBUG", `${JSON.stringify(buttonTest())}`);
 						event.reply(buttonTest()).then(function (data) {
-							logMessage("INFO", `data: \"${JSON.stringify(data)}\"`);
+							logMessage.log("INFO", `data: \"${JSON.stringify(data)}\"`);
 						}).catch(function (error) {
-							logMessage("ERROR", error);
+							logMessage.log("ERROR", error);
 						});
+					}else if (event.message.text.indexOf("天氣") !== -1){
 						// get weather msg
-						/*tw.get(
-							config.twKey,
-							{
-								loc: tw.DataEnum.Loc[citys[17]],
-								freq: tw.DataEnum.Freq.H72,
-								lang: tw.DataEnum.Lang.ZH,
-								output: 'data',
-								prefix: twFileName,
-								toJson: true
-							},
-							err => {
-								if (err) {
-									logMessage("ERROR", err);
-								}else{
-									let twData = JSON.parse(fs.readFileSync(`./data/${twFileName}63_72hr_CH.json`));
-									var locDescription = [];
-									twData.cwbopendata.dataset[0].locations[0].location.map((element)=>{
-										locDescription.push({
-											locationName: element.locationName[0],
-											weatherDescription: element.weatherElement[10].time[0].elementValue[0].value[0].replace(/。/g,"\n")
-										})
-									});
+						let locDescription = getWeatherInfo(location, area);
+						let weatherDescription = "";
+						if(locDescription.length === 0){
+							weatherDescription = "無法查詢到你指定地點的天氣資訊";
+						}else{
+							weatherDescription = locDescription[0].weatherDescription;
+						}
+						event.reply(weatherDescription).then(function (data) {
+							logMessage.log("INFO", `已傳送: \"${weatherDescription}\",至客戶端`);
+						}).catch(function (error) {
+							logMessage.log("ERROR", error);
+						});
 
-									fs.unlinkSync(`./data/${twFileName}63_72hr_CH.json`);
-									fs.unlinkSync(`./data/${twFileName}63_72hr_CH.xml`);
 
-									logMessage("DEBUG", JSON.stringify(locDescription));
-									event.reply(locDescription).then(function (data) {
-										logMessage("INFO", `已傳送: \"\",至客戶端`);
-									}).catch(function (error) {
-										logMessage("ERROR", error);
-									});
-								}
-							}
-						);*/
+
+
+
+						
 					}
 					break;
 				case 'sticker':
 					//receive sticker process
-					logMessage("DEBUG", `${userName} send a sticker`);
+					logMessage.log("DEBUG", `${userName} send a sticker`);
 					break;
 				case 'image':
 					//receive sticker process
-					logMessage("DEBUG", `${userName} send a image`);
+					logMessage.log("DEBUG", `${userName} send a image`);
 					break;
 				case 'video':
 					//receive sticker process
-					logMessage("DEBUG", `${userName} send a video`);
+					logMessage.log("DEBUG", `${userName} send a video`);
 					break;
 				default:
 					// receive other message type process ...[TBD]
-					logMessage("DEBUG", `${userName} send something that message type does not define`);
+					logMessage.log("DEBUG", `${userName} send something that message type does not define`);
 			}
 		});
 	} catch(error){
-		logMessage("ERROR", error);
+		logMessage.log("ERROR", error);
 	}
 	
   
@@ -130,10 +107,10 @@ bot.on('message', function (event) {
 
 bot.listen('/linewebhook', 3000, function () {
 	// print the current running mode
-	debugMode?logMessage("INFO",'[linebot is ready!] (Debug)'):logMessage("INFO", '[linebot is ready!]');
+	debugMode?logMessage.log("INFO",'[linebot is ready!] (Debug)'):logMessage.log("INFO", '[linebot is ready!]');
 	
 });
-
+//button message test
 function buttonTest(){
 	var actions = [{
 		"type": "postback",
@@ -164,19 +141,19 @@ function ramdonChooseEvent(event, userName){
 	// remove the specific item
 	items = items.filter(item => item !== "隨機選擇");
 	// print the all item that will be choose by ramdon
-	logMessage("INFO", "偵測\"隨機選擇\"事件,選項包含: "+items);
+	logMessage.log("INFO", "偵測\"隨機選擇\"事件,選項包含: "+items);
 	// check if any item lenth great than 10...
 	if(items.filter(item => item.length > 10).length > 0){ 
-		logMessage("ERROR", `選項大於10個字元`);
+		logMessage.log("ERROR", `選項大於10個字元`);
 		var reqMessage = `Hi, ${userName} \n任意選項請不要超過10個字元！`;
 	}else{
 		var reqMessage = `Hi, ${userName} \n你的隨機選擇結果為${ramdonChoose(items)}`;
 	}
 	// send msg to user
 	event.reply(reqMessage).then(function (data) {
-		logMessage("INFO", `已傳送: \"${reqMessage.replace(/\r\n|\n/g,"\\n")}\",至客戶端`);
+		logMessage.log("INFO", `已傳送: \"${reqMessage.replace(/\r\n|\n/g,"\\n")}\",至客戶端`);
 	}).catch(function (error) {
-		logMessage("ERROR", error);
+		logMessage.log("ERROR", error);
 	});
 }
 // get ramdon result
@@ -189,32 +166,43 @@ function getRandomInt(max) {
 	return Math.floor(Math.random() * max);
 }
 
-// log message process
-function logMessage(logType, logMessage){
-	switch(logType){
-		case "ERROR":
-			writeLogFile(`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] ERROR: ${logMessage}\n`);
-			console.log("\x1b[31m",`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] ERROR: ${logMessage}`);
-			break;
-		case "INFO":
-			writeLogFile(`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] INFO: ${logMessage}\n`);
-			console.log("\x1b[32m",	`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] INFO: ${logMessage}`);
-			break;
-		case "DEBUG":
-			writeLogFile(`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] DEBUG: ${logMessage}\n`);
-			if(debugMode === 1) console.log("\x1b[34m",`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] DEBUG: ${logMessage}`);
-			break;
-		default:
-			writeLogFile(`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] Error: The log type does not existed\n`);
-			console.log("\x1b[31m",`[${moment(Timestamp).format('YYYY-MM-DDTHH:mm:ss.SSS')}] Error: The log type does not existed`);
-	}
-		
-}
-// write log msg into log file
-function writeLogFile(msg){	
-	if(!fs.existsSync(logPath))
-		fs.mkdirSync(logPath);
-	fs.appendFile(logPath+"/"+logFileName, msg, function (err) {
-		if (err) console.log(err);
-	});
+// get weather info
+function getWeatherInfo(location, area){
+	var locDescription = [];
+	tw.get(
+		config.twKey,
+		{
+			loc: tw.DataEnum.Loc.location,
+			freq: tw.DataEnum.Freq.H72,
+			lang: tw.DataEnum.Lang.ZH,
+			output: 'data',
+			prefix: twFileName,
+			toJson: true
+		},
+		err => {
+			if (err) {
+				logMessage.log("ERROR", err);
+				return locDescription;
+			}else{
+				let twData = JSON.parse(fs.readFileSync(`./data/${twFileName}63_72hr_CH.json`));
+				
+				twData.cwbopendata.dataset[0].locations[0].location.map((element)=>{
+					locDescription.push({
+						locationName: element.locationName[0],
+						weatherDescription: element.weatherElement[10].time[0].elementValue[0].value[0].replace(/。/g,"\n")
+					})
+				});
+
+				fs.unlinkSync(`./data/${twFileName}63_72hr_CH.json`);
+				fs.unlinkSync(`./data/${twFileName}63_72hr_CH.xml`);
+
+				logMessage.log("DEBUG", JSON.stringify(locDescription));
+				
+				locDescription.filter(element => element === area);
+				
+				
+			}
+		}
+	);
+	return locDescription;
 }
