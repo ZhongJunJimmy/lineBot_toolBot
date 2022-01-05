@@ -64,7 +64,7 @@ bot.on('message', function (event) {
 						items = items.filter(item => item !== "天氣");
 						// print the all item that will be choose by ramdon
 						logMessage.log(debugMode, "INFO", "偵測\"天氣\"事件,地點為: "+items);
-						getWeatherInfo(event, userName, constLoc[items[0]], items[1]);
+						getWeatherInfo(event, userName, items[0], items[1]);
 						
 					}
 					break;
@@ -158,7 +158,7 @@ function getWeatherInfo(event, userName, location, area){
 	tw.get(
 		config.twKey,
 		{
-			loc: tw.DataEnum.Loc.location,
+			loc: tw.DataEnum.Loc[constLoc[location]],
 			freq: tw.DataEnum.Freq.H72,
 			lang: tw.DataEnum.Lang.ZH,
 			output: 'data',
