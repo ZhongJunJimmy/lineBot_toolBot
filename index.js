@@ -64,19 +64,8 @@ bot.on('message', function (event) {
 						items = items.filter(item => item !== "天氣");
 						// print the all item that will be choose by ramdon
 						logMessage.log(debugMode, "INFO", "偵測\"天氣\"事件,地點為: "+items);
-
-						let locDescription = getWeatherInfo(userName, constLoc[items[0]], items[1]);
-						let weatherDescription = "";
-						if(locDescription.length === 0){
-							weatherDescription = "無法查詢到你指定地點的天氣資訊";
-						}else{
-							weatherDescription = locDescription[0].weatherDescription;
-						}
-						event.reply(weatherDescription).then(function (data) {
-							logMessage.log(debugMode, "INFO", `已傳送: \"${weatherDescription}\",至客戶端`);
-						}).catch(function (error) {
-							logMessage.log(debugMode, "ERROR", error);
-						});
+						getWeatherInfo(event, userName, constLoc[items[0]], items[1]);
+						
 
 
 
@@ -170,9 +159,8 @@ function getRandomInt(max) {
 }
 
 // get weather info
-function getWeatherInfo(userName, location, area){
+function getWeatherInfo(event, userName, location, area){
 	let twFileName = `${userName}_${Timestamp}_`;
-	var locDescription = [];
 	tw.get(
 		config.twKey,
 		{
@@ -186,8 +174,8 @@ function getWeatherInfo(userName, location, area){
 		err => {
 			if (err) {
 				logMessage.log(debugMode, "ERROR", err);
-				return locDescription;
 			}else{
+				let locDescription = [];
 				let twData = JSON.parse(fs.readFileSync(`./data/${twFileName}63_72hr_CH.json`));
 				
 				twData.cwbopendata.dataset[0].locations[0].location.map((element)=>{
@@ -203,10 +191,23 @@ function getWeatherInfo(userName, location, area){
 				logMessage.log(debugMode, "DEBUG", JSON.stringify(locDescription));
 				
 				locDescription.filter(element => element === area);
+				let weatherDescription = "";
+				if(locDescription.length === 0){
+					weatherDescription = "無法查詢到你指定地點的天氣資訊";
+				}else{
+					weatherDescription = locDescription[0].weatherDescription;
+				}
+
+				event.reply(weatherDescription).then(function (data) {
+					logMessage.log(debugMode, "INFO", `已傳送: \"${weatherDescription}\",至客戶端`);
+				}).catch(function (error) {
+					logMessage.log(debugMode, "ERROR", error);
+				});
 				
 				
 			}
 		}
 	);
-	return locDescription;
+	
+	
 }
