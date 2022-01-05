@@ -172,8 +172,8 @@ function getWeatherInfo(event, userName, location, area){
 				let locDescription = [];
 				let fileList = fs.readdirSync("./data/");
 				fileList.filter((file)=>file.indexOf(twFileName) !== -1);
+				logMessage.log(debugMode, "DEBUG", `tw file name: ${fileList[0]}`);
 				let twData = JSON.parse(fs.readFileSync(`./data/${fileList[0]}`));
-				
 				twData.cwbopendataldataset[0].locations[0].location.map((element)=>{
 					locDescription.push({
 						locationName: element.locationName[0],
