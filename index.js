@@ -182,7 +182,7 @@ function getWeatherInfo(event, userName, location, area){
 				});
 
 				fs.unlinkSync(`./data/${fileList[0]}`);
-				fs.unlinkSync(`./data/${fileList[0].replace(/".json"/g,".xml")}`);
+				fs.unlinkSync(`./data/${fileList[0].replace(/.json/g,".xml")}`);
 
 				logMessage.log(debugMode, "DEBUG", JSON.stringify(locDescription));
 				
