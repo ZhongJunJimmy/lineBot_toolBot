@@ -50,7 +50,7 @@ bot.on('message', function (event) {
 						//隨機選擇事件
 						ramdonChooseEvent(event, userName);
 					}else if(event.message.text.indexOf("button") !== -1){
-						//let twFileName = `${userName}_${Timestamp}_`;
+						
 						logMessage.log(debugMode, "DEBUG", `${JSON.stringify(buttonTest())}`);
 						event.reply(buttonTest()).then(function (data) {
 							logMessage.log(debugMode, "INFO", `data: \"${JSON.stringify(data)}\"`);
@@ -172,6 +172,7 @@ function getRandomInt(max) {
 
 // get weather info
 function getWeatherInfo(location, area){
+	let twFileName = `${userName}_${Timestamp}_`;
 	var locDescription = [];
 	tw.get(
 		config.twKey,
