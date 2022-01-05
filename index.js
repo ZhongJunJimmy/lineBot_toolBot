@@ -175,7 +175,7 @@ function getWeatherInfo(event, userName, location, area){
 				twData.cwbopendata.dataset[0].locations[0].location.map((element)=>{
 					locDescription.push({
 						locationName: element.locationName[0],
-						weatherDescription: element.weatherElement[10].time[0].elementValue[0].value[0].replace(/。/g,"\n")
+						weatherDescription: element.weatherElement[10].time[0].elementValue[0].value[0]
 					})
 				});
 
