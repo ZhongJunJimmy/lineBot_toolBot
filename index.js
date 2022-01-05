@@ -198,7 +198,7 @@ function getWeatherInfo(event, userName, location, area){
 				}
 
 				event.reply(weatherDescription).then(function (data) {
-					logMessage.log(debugMode, "INFO", `已傳送: \"${weatherDescription}\",至客戶端`);
+					logMessage.log(debugMode, "INFO", `已傳送: \"${weatherDescription.replace(/\r\n|\n/g,"\\n")}\",至客戶端`);
 				}).catch(function (error) {
 					logMessage.log(debugMode, "ERROR", error);
 				});
