@@ -155,7 +155,6 @@ function getRandomInt(max) {
 // get weather info
 function getWeatherInfo(event, userName, location, area){
 	let twFileName = `${userName}_${Timestamp}_`;
-	console.log(location);
 	tw.get(
 		config.twKey,
 		{
@@ -190,7 +189,7 @@ function getWeatherInfo(event, userName, location, area){
 				if(locDescription.length === 0){
 					weatherDescription = "無法查詢到你指定地點的天氣資訊";
 				}else{
-					weatherDescription = `Hi ${userName},\n${location}${area} 當前天氣狀況如下${locDescription[0].weatherDescription}`;
+					weatherDescription = `Hi ${userName},\n${location}${area} 當前天氣狀況如下: ${locDescription[0].weatherDescription}`;
 				}
 
 				event.reply(weatherDescription).then(function (data) {
