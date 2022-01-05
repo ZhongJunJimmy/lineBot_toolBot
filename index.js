@@ -181,8 +181,8 @@ function getWeatherInfo(event, userName, location, area){
 					})
 				});
 
-				fs.unlinkSync(`./data/${twFileName}63_72hr_CH.json`);
-				fs.unlinkSync(`./data/${twFileName}63_72hr_CH.xml`);
+				fs.unlinkSync(`./data/${fileList[0]}`);
+				fs.unlinkSync(`./data/${fileList[0].replace(/".json"/g,".xml")}`);
 
 				logMessage.log(debugMode, "DEBUG", JSON.stringify(locDescription));
 				
