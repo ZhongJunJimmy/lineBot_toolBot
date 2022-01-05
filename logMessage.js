@@ -1,5 +1,6 @@
-var fs = require('fs');
-
+var fs = require('fs');\
+var moment = require('moment');
+var Timestamp = Date.now();
 // log message process
 function log(logType, logMessage){
 	switch(logType){
